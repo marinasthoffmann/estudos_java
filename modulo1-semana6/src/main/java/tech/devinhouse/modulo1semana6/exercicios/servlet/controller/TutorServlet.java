@@ -1,24 +1,24 @@
-package tech.devinhouse.modulo1semana6.controller;
+package tech.devinhouse.modulo1semana6.exercicios.servlet.controller;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import tech.devinhouse.modulo1semana6.model.Pessoa;
+import tech.devinhouse.modulo1semana6.exercicios.servlet.model.Tutor;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@WebServlet(value = "/pessoa")
-public class PessoaServlet extends HttpServlet {
+@WebServlet(value = "/tutor")
+public class TutorServlet extends HttpServlet {
 
-    private static List<Pessoa> pessoas = new ArrayList<>();
+    private static List<Tutor> tutores = new ArrayList<>();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.getWriter().println(pessoas);
+        resp.getWriter().println(tutores);
     }
 
     @Override
@@ -29,13 +29,13 @@ public class PessoaServlet extends HttpServlet {
         System.out.print("Nome: " + nome);
         System.out.print("Idade: " + idade);
 
-        Pessoa pessoa = new Pessoa();
-        pessoa.setNome(nome);
-        pessoa.setIdade(idade);
+        Tutor tutor = new Tutor();
+        tutor.setNome(nome);
+        tutor.setIdade(idade);
 
-        pessoas.add(pessoa);
+        tutores.add(tutor);
 
-        resp.getWriter().println(pessoa);
+        resp.getWriter().println(tutor);
     }
 
     @Override
@@ -44,35 +44,35 @@ public class PessoaServlet extends HttpServlet {
         String nome = req.getParameter("nome");
         Integer idade = Integer.parseInt(req.getParameter("idade"));
 
-        Pessoa pessoa = findById(id);
-        if(pessoa == null){
+        Tutor tutor = findById(id);
+        if(tutor == null){
             resp.getWriter().println(false);
             return;
         }
-        pessoa.setNome(nome);
-        pessoa.setIdade(idade);
+        tutor.setNome(nome);
+        tutor.setIdade(idade);
 
-        resp.getWriter().println(pessoa);
+        resp.getWriter().println(tutor);
     }
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Integer id = Integer.parseInt(req.getParameter("id"));
-        Pessoa pessoa = findById(id);
+        Tutor tutor = findById(id);
 
-        if(pessoa == null){
+        if(tutor == null){
             resp.getWriter().println(false);
             return;
         }else {
-            pessoas.remove(pessoa);
+            tutores.remove(tutor);
             resp.getWriter().println(true);
         }
     }
 
-    private Pessoa findById(Integer id){
-        for(Pessoa pessoa: pessoas){
-            if (pessoa.getId().equals(id)){
-                return pessoa;
+    private Tutor findById(Integer id){
+        for(Tutor tutor: tutores){
+            if (tutor.getId().equals(id)){
+                return tutor;
             }
         }
         return null;
