@@ -11,14 +11,29 @@ import java.util.List;
 public interface PetRepository extends JpaRepository<Pet, Integer> {
 
     //DerivedQueries
-//    public List<Pet> findByNomeContaining(String nome);
+    List<Pet> findByNomeContainingOrderByIdDesc(String nome);
 
     //JPQL
 //    @Query("SELECT p FROM Pet p WHERE p.nome LIKE %:nome%")
 //    List<Pet> findByNomeContaining(String nome);
 
     //SQL NATIVO
-    @Query(value = "SELECT p FROM Pet p WHERE p.nome LIKE %:nome%")
-    public List<Pet> findByNomeContaining(String nome);
+//    @Query(value = "SELECT p FROM Pet p WHERE p.nome LIKE %:nome%")
+//    public List<Pet> findByNomeContaining(String nome);
+
+    List<Pet> findByTutorNome(String nomeTutor);
+
+//    @Query("SELECT p FROM Pet p WHERE p.tutor.nome = :nomeTutor")
+//    List<Pet> findByTutorNome(String nomeTutor);
+
+//    SELECT p.* FROM pet p
+//    JOIN tutor t ON t.id = p.tutor_id
+//    WHERE t.nome = :nomeTutor;
+
+    @Query("SELECT COUNT(p) FROM Pet p WHERE p.tutor.nome = :nomeTutor")
+    Integer countByTutorNome(String nomeTutor);
+
+    @Query("SELECT p.nome FROM Pet p WHERE p.tutor.nome = :nomeTutor")
+    List<String> findNomeByTutor(String nomeTutor);
 
 }

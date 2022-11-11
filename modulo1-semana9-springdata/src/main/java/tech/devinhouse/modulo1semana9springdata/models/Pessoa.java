@@ -16,4 +16,9 @@ public class Pessoa {
     @Column(length = 100)
     private String nome;
 
+    private String docReceitaFederal;
+
+    @ManyToOne
+    private Tutor tutor;
+
 }

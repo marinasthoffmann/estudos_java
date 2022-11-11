@@ -20,6 +20,5 @@ public class Pet {
     private String tipo;
     private String raca;
     @ManyToOne
-    @JsonIgnore
     private Tutor tutor;
 }

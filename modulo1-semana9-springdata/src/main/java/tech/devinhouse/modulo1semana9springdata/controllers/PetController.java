@@ -14,11 +14,27 @@ public class PetController {
     @Autowired private PetService petService;
 
     @GetMapping
-    public List<Pet> get(String nome){
+    public List<Pet> get(String nome, Integer pagina, Integer tamanho){
         if (nome != null && !nome.isEmpty()){
             return petService.get(nome);
         }
-        return petService.get();
+        return petService.get(pagina, tamanho);
+//        return petService.get();
+    }
+
+    @GetMapping(path = "findByTutor")
+    public List<Pet> findByTutor(String nome){
+        return petService.getByTutor(nome);
+    }
+
+    @GetMapping(path = "countByTutor")
+    public Integer countByTutor(String nome){
+        return petService.countByTutor(nome);
+    }
+
+    @GetMapping(path = "findNomeByTutor")
+    public List<String> findNomeByTutor(String nome){
+        return petService.findNomeByTutor(nome);
     }
 
     @PostMapping
