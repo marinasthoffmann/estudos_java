@@ -45,13 +45,8 @@ public class VendaController {
         return vendaService.salvar(venda);
     }
 
-    @PutMapping
-    public Venda put(@RequestBody Venda venda) throws Exception {
-        return vendaService.salvar(venda);
-    }
-
-    @DeleteMapping
-    public boolean delete(Integer id){
-        return vendaService.apagar(id);
+    @DeleteMapping(path = "{id}")
+    public Venda delete(@PathVariable("id") Integer id){
+        return vendaService.cancelar(id);
     }
 }

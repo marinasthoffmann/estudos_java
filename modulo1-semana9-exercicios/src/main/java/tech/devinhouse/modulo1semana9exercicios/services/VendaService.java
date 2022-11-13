@@ -53,15 +53,6 @@ public class VendaService {
         return vendaRepository.save(venda);
     }
 
-    public boolean apagar(Integer id){
-        try{
-            vendaRepository.deleteById(id);
-            return true;
-        }catch (Exception e){
-            return false;
-        }
-    }
-
     public Venda buscarPorId(Integer id) {
         return vendaRepository.findById(id).get();
     }
@@ -78,5 +69,11 @@ public class VendaService {
 
     public List<Venda> buscarPorStatus(String status){
         return vendaRepository.findByStatusIgnoreCase(status);
+    }
+
+    public Venda cancelar(Integer id) {
+        Venda venda = vendaRepository.findById(id).get();
+        venda.setStatus("C");
+        return vendaRepository.save(venda);
     }
 }
