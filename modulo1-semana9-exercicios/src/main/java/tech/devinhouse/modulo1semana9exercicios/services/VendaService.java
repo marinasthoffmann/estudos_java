@@ -8,6 +8,8 @@ import tech.devinhouse.modulo1semana9exercicios.repositories.ProdutoRepository;
 import tech.devinhouse.modulo1semana9exercicios.repositories.VendaRepository;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -60,4 +62,21 @@ public class VendaService {
         }
     }
 
+    public Venda buscarPorId(Integer id) {
+        return vendaRepository.findById(id).get();
+    }
+
+    public List<Venda> buscarPorDatas(Date dataInicial, Date dataFinal) {
+        if (dataInicial == null){
+            return new ArrayList<>();
+        }
+        if (dataFinal == null){
+            return vendaRepository.findByDataVendaAfter(dataInicial);
+        }
+        return vendaRepository.findByDataVendaBetween(dataInicial, dataFinal);
+    }
+
+    public List<Venda> buscarPorStatus(String status){
+        return vendaRepository.findByStatusIgnoreCase(status);
+    }
 }
