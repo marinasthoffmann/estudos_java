@@ -1,10 +1,13 @@
 package tech.devinhouse.modulo1semana10devingran.service;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import tech.devinhouse.modulo1semana10devingran.exception.RegistroExistenteException;
 import tech.devinhouse.modulo1semana10devingran.exception.RegistroNaoEncontradoException;
 import tech.devinhouse.modulo1semana10devingran.model.Perfil;
+import tech.devinhouse.modulo1semana10devingran.model.Status;
 import tech.devinhouse.modulo1semana10devingran.repository.PerfilRepository;
 
 import java.time.LocalDateTime;
@@ -17,8 +20,15 @@ public class PerfilService {
 
     private PerfilRepository repo;
 
-    public List<Perfil> consultar(){
-        return repo.findAll();
+    public List<Perfil> consultar(Integer tamanho, Integer pagina, String ordenacao, String direcao){
+//        return repo.findAll();
+        Sort.Direction directionSort = Sort.Direction.ASC;
+        PageRequest pageable = PageRequest.of(pagina, tamanho).withSort(directionSort, ordenacao);
+        return repo.findAll(pageable).getContent();
+    }
+
+    public List<Perfil> consultar(Status status) {
+        return repo.findByStatus(status);
     }
 
     public Perfil consultar(String nome){

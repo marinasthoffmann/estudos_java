@@ -8,8 +8,11 @@ import tech.devinhouse.modulo1semana10devingran.dto.PerfilRequest;
 import tech.devinhouse.modulo1semana10devingran.dto.PerfilResponse;
 import tech.devinhouse.modulo1semana10devingran.dto.UpdatePerfilRequest;
 import tech.devinhouse.modulo1semana10devingran.model.Perfil;
+import tech.devinhouse.modulo1semana10devingran.model.Status;
 import tech.devinhouse.modulo1semana10devingran.service.PerfilService;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,20 +27,33 @@ public class PerfilController {
     private ModelMapper mapper;
 
     @GetMapping
-    public ResponseEntity<List<PerfilResponse>> listar() {
-//        List<Perfil> perfis = List.of(
-//                new Perfil("marina", "doida varrida", LocalDate.now().minusYears(20), "desenvolvedor de sw", LocalDateTime.now(), LocalDateTime.now()),
-//                new Perfil("lucas", "nada normal", LocalDate.now().minusYears(20), "desenvolvedor de sw", LocalDateTime.now(), LocalDateTime.now())
-//        );
-//        return ResponseEntity.ok(perfis);
-        List<Perfil> perfis = perfilService.consultar();
-//        List<PerfilResponse> resp = new ArrayList<>();
-//        for (Perfil perfil: perfis){
-//            PerfilResponse r = mapper.map(perfil, PerfilResponse.class);
-//            resp.add(r);
-//        }
-        List<PerfilResponse> resp = perfis.stream().map(p -> mapper.map(p, PerfilResponse.class))
-                .collect(Collectors.toList());
+    public ResponseEntity<List<PerfilResponse>> listar(
+            @RequestParam(value = "size", required = false, defaultValue = "3") Integer tamanho,
+            @RequestParam(value = "page", required = false, defaultValue = "0") Integer pagina,
+            @RequestParam(value = "sort", required = false, defaultValue = "nome") String ordenacao,
+            @RequestParam(value = "direction", required = false, defaultValue = "ASC") String direcao){
+        List<Perfil> perfis = perfilService.consultar(tamanho, pagina, ordenacao, direcao);
+        List<PerfilResponse> resp = new ArrayList<>();
+        for (Perfil perfil: perfis) {
+            PerfilResponse r = mapper.map(perfil, PerfilResponse.class);
+            resp.add(r);
+        }
+        return ResponseEntity.ok(resp);
+    }
+
+    @GetMapping("filtrado")
+    public ResponseEntity<List<PerfilResponse>> listarFiltrado(
+            @RequestParam(value = "filtro-status", required = true)
+            @Pattern(regexp = "ATIVO|INATIVO", message = "{campo.invalido}") String filtroStatus ) {
+        Status status = Status.valueOf(filtroStatus);
+        List<Perfil> perfis = perfilService.consultar(status);
+        List<PerfilResponse> resp = new ArrayList<>();
+        for (Perfil perfil: perfis) {
+            PerfilResponse r = mapper.map(perfil, PerfilResponse.class);
+            resp.add(r);
+        }
+//        List<PerfilResponse> resp = perfis.stream()
+//                .map(p -> mapper.map(p, PerfilResponse.class)).collect(Collectors.toList());
         return ResponseEntity.ok(resp);
     }
 
@@ -49,7 +65,7 @@ public class PerfilController {
     }
 
     @PostMapping
-    public ResponseEntity<PerfilResponse> criar(@RequestBody PerfilRequest request){
+    public ResponseEntity<PerfilResponse> criar(@RequestBody @Valid PerfilRequest request){
         Perfil perfil = mapper.map(request, Perfil.class);
         perfil = perfilService.criar(perfil);
         PerfilResponse resp = mapper.map(perfil, PerfilResponse.class);
@@ -57,7 +73,7 @@ public class PerfilController {
     }
 
     @PutMapping("{nome}")
-    public ResponseEntity<PerfilResponse> atualizar(@PathVariable("nome") String nome, @RequestBody UpdatePerfilRequest request){
+    public ResponseEntity<PerfilResponse> atualizar(@PathVariable("nome") String nome, @RequestBody @Valid UpdatePerfilRequest request){
         Perfil perfil = mapper.map(request, Perfil.class);
         perfil.setNome(nome);
         perfil = perfilService.atualizar(perfil);

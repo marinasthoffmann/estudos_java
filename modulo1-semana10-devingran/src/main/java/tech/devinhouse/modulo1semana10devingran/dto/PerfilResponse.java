@@ -1,8 +1,8 @@
 package tech.devinhouse.modulo1semana10devingran.dto;
 
 import lombok.Data;
+import tech.devinhouse.modulo1semana10devingran.model.Status;
 
-import javax.persistence.Id;
 import java.time.LocalDate;
 
 @Data
@@ -15,4 +15,6 @@ public class PerfilResponse {
     private LocalDate dataNascimento;
 
     private String profissao;
+
+    private Status status;
 }
