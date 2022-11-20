@@ -38,8 +38,9 @@ public class JogadorController {
     }
 
     @GetMapping
-    public ResponseEntity<List<JogadorResponse>> consultar(@PathVariable("sigla") String sigla){
-        List<Jogador> jogadores = jogadorService.consultar(sigla);
+    public ResponseEntity<List<JogadorResponse>> consultar(
+            @PathVariable("sigla") String sigla, @RequestParam(value = "nome", required = false) String nomePesquisa){
+        List<Jogador> jogadores = jogadorService.consultar(sigla, nomePesquisa);
         List<JogadorResponse> response = jogadores.stream().map(p -> mapper.map(p, JogadorResponse.class))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);

@@ -13,6 +13,7 @@ import tech.devinhouse.modulo1semana10copadomundo.models.Selecao;
 import tech.devinhouse.modulo1semana10copadomundo.repositories.JogadorRepository;
 import tech.devinhouse.modulo1semana10copadomundo.repositories.SelecaoRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,8 +36,19 @@ public class JogadorService {
         return jogador;
     }
 
-    public List<Jogador> consultar(@PathVariable("sigla") String sigla){
-        return jogadorRepository.findAll();
+    public List<Jogador> consultar(String sigla, String pesquisa){
+        Selecao selecao = selecaoRepository.findById(sigla)
+                .orElseThrow(() -> new RegistroNaoEncontradoException(Selecao.class.getSimpleName(), sigla));
+        List<Jogador> jogadores = selecao.getJogadores();
+        if (pesquisa == null)
+            return jogadores;
+        List<Jogador> filtrados = new ArrayList<>();
+        for(Jogador jogador : jogadores){
+            if(jogador.getNome().contains(pesquisa)){
+                filtrados.add(jogador);
+            }
+        }
+        return filtrados;
     }
 
     public void deletar(String sigla, Integer idJogador){
