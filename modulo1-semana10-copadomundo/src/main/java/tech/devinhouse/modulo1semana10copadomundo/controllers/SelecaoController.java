@@ -60,4 +60,14 @@ public class SelecaoController {
         SelecaoResponse response = mapper.map(selecao, SelecaoResponse.class);
         return ResponseEntity.ok(response);
     }
+
+    @DeleteMapping("{sigla}")
+    public ResponseEntity<SelecaoResponse> deletar(@PathVariable("sigla") String sigla){
+        try{
+            service.deletar(sigla);
+            return ResponseEntity.noContent().build();
+        }catch (RegistroNaoEncontradoException e){
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

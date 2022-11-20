@@ -40,7 +40,6 @@ public class SelecaoService {
         if (opt.isEmpty()){
             new  RegistroNaoEncontradoException(Selecao.class.getSimpleName(), sigla);
         }
-//        String sigla = selecao.getSigla();
         Selecao selecaoBD = selecaoRepository.findById(sigla)
                 .orElseThrow(() -> new RegistroNaoEncontradoException(Selecao.class.getSimpleName(), sigla));
         selecaoBD.setGrupo(selecao.getGrupo());
@@ -49,4 +48,10 @@ public class SelecaoService {
         return selecao;
     }
 
+    public void deletar(String sigla){
+        if(!selecaoRepository.existsById(sigla)){
+            throw new RegistroNaoEncontradoException(Selecao.class.getSimpleName(), sigla);
+        }
+        selecaoRepository.deleteById(sigla);
+    }
 }
