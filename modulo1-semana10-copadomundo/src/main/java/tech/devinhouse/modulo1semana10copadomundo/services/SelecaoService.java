@@ -7,6 +7,7 @@ import tech.devinhouse.modulo1semana10copadomundo.models.Selecao;
 import tech.devinhouse.modulo1semana10copadomundo.repositories.SelecaoRepository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -21,6 +22,10 @@ public class SelecaoService {
         selecao.setDataCadastro(LocalDateTime.now());
         selecao = selecaoRepository.save(selecao);
         return selecao;
+    }
+
+    public List<Selecao> consultar(){
+        return selecaoRepository.findAll();
     }
 
 }
