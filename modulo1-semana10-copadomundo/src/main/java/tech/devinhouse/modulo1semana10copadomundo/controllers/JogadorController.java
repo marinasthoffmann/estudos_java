@@ -45,4 +45,10 @@ public class JogadorController {
         return ResponseEntity.ok(response);
     }
 
+    @DeleteMapping("{id}")
+    public ResponseEntity<JogadorResponse> excluir(@PathVariable("sigla") String sigla, @PathVariable("id") Integer id){
+        jogadorService.deletar(sigla, id);
+        return ResponseEntity.noContent().build();
+    }
+
 }

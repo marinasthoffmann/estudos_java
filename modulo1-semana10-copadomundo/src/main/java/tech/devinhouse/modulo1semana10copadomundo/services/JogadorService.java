@@ -14,6 +14,7 @@ import tech.devinhouse.modulo1semana10copadomundo.repositories.JogadorRepository
 import tech.devinhouse.modulo1semana10copadomundo.repositories.SelecaoRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -36,5 +37,12 @@ public class JogadorService {
 
     public List<Jogador> consultar(@PathVariable("sigla") String sigla){
         return jogadorRepository.findAll();
+    }
+
+    public void deletar(String sigla, Integer idJogador){
+        Optional<Jogador> opt = jogadorRepository.findBySelecaoEidJogador(sigla, idJogador);
+        if(opt.isEmpty())
+            throw new RegistroNaoEncontradoException(Jogador.class.getSimpleName(), idJogador);
+        jogadorRepository.deleteById(idJogador);
     }
 }
