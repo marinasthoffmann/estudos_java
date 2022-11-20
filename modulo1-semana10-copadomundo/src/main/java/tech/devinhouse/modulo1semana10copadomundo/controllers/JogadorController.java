@@ -13,6 +13,8 @@ import tech.devinhouse.modulo1semana10copadomundo.services.JogadorService;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("selecoes/{sigla}/jogadores")
@@ -33,6 +35,14 @@ public class JogadorController {
         }
         JogadorResponse response = mapper.map(jogador, JogadorResponse.class);
         return ResponseEntity.created(URI.create(response.getId().toString())).body(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<JogadorResponse>> consultar(@PathVariable("sigla") String sigla){
+        List<Jogador> jogadores = jogadorService.consultar(sigla);
+        List<JogadorResponse> response = jogadores.stream().map(p -> mapper.map(p, JogadorResponse.class))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(response);
     }
 
 }
