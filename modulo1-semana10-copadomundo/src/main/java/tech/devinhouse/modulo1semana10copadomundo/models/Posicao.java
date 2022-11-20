@@ -4,7 +4,7 @@ public enum Posicao {
 
     GOLEIRO,
     ZAGUEIRO,
-    VOLTANTE,
+    VOLANTE,
     LATERAL,
     MEIO_CAMPISTA,
     ATACANTE
