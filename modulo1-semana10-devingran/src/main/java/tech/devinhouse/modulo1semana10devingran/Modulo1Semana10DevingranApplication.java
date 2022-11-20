@@ -28,8 +28,8 @@ public class Modulo1Semana10DevingranApplication {
         return args -> {
             List<Perfil> lista = perfilService.consultar(3, 0, "nome", "ASC");
             if (lista.isEmpty()){
-                perfilService.criar(new Perfil("Marina", "Doida varrida", LocalDate.now().minusYears(29), "Desenvolvedor", LocalDateTime.now(), LocalDateTime.now(), Status.ATIVO));
-                perfilService.criar(new Perfil("Lucas", "Nada normal", LocalDate.now().minusYears(30), "Desenvolvedor", LocalDateTime.now(), LocalDateTime.now(), Status.ATIVO));
+                perfilService.criar(new Perfil("Marina", "Doida varrida", LocalDate.now().minusYears(29), "Desenvolvedor", LocalDateTime.now(), LocalDateTime.now(), Status.ATIVO, null));
+                perfilService.criar(new Perfil("Lucas", "Nada normal", LocalDate.now().minusYears(30), "Desenvolvedor", LocalDateTime.now(), LocalDateTime.now(), Status.ATIVO, null));
             }
         };
     }
