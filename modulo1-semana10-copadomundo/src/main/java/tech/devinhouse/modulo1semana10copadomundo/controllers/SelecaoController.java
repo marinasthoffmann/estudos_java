@@ -38,4 +38,11 @@ public class SelecaoController {
                 .map(s -> mapper.map(s, SelecaoResponse.class)).collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping(path = "{sigla}")
+    public ResponseEntity<SelecaoResponse> consultar(@PathVariable("sigla") String sigla){
+        Selecao selecao = service.consultar(sigla);
+        SelecaoResponse response = mapper.map(selecao, SelecaoResponse.class);
+        return ResponseEntity.ok(response);
+    }
 }
