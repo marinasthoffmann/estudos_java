@@ -35,4 +35,18 @@ public class SelecaoService {
         return opt.orElseThrow(() -> new RegistroNaoEncontradoException(Selecao.class.getSimpleName(), sigla));
     }
 
+    public Selecao atualizar(Selecao selecao, String sigla){
+        Optional<Selecao> opt = selecaoRepository.findById(sigla);
+        if (opt.isEmpty()){
+            new  RegistroNaoEncontradoException(Selecao.class.getSimpleName(), sigla);
+        }
+//        String sigla = selecao.getSigla();
+        Selecao selecaoBD = selecaoRepository.findById(sigla)
+                .orElseThrow(() -> new RegistroNaoEncontradoException(Selecao.class.getSimpleName(), sigla));
+        selecaoBD.setGrupo(selecao.getGrupo());
+        selecaoBD.setNome(selecao.getNome());
+        selecao = selecaoRepository.save(selecaoBD);
+        return selecao;
+    }
+
 }
