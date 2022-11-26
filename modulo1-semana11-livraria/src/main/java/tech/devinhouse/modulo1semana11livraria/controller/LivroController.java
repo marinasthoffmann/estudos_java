@@ -1,9 +1,15 @@
 package tech.devinhouse.modulo1semana11livraria.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tech.devinhouse.modulo1semana11livraria.dto.ErroResponse;
 import tech.devinhouse.modulo1semana11livraria.dto.LivroRequest;
 import tech.devinhouse.modulo1semana11livraria.dto.LivroResponse;
 import tech.devinhouse.modulo1semana11livraria.model.Livro;
@@ -22,6 +28,18 @@ public class LivroController {
     private ModelMapper mapper;
     private LivroService service;
 
+    @Operation(summary = "Serviço de inserção de livros", description = "Insere livros no servidor para ficar disponível para acesso dos usuários")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Livro cadastrado com sucesso",
+                            content = { @Content(schema = @Schema(implementation = LivroResponse.class)) }),
+                    @ApiResponse(responseCode = "409", description = "Livro com ISBN já cadastrado",
+                            content = { @Content(schema = @Schema(implementation = ErroResponse.class)) }),
+                    @ApiResponse(responseCode = "400", description = "Requisição com dados inválidos de livros",
+                            content = { @Content(schema = @Schema(implementation = ErroResponse.class)) }
+                    )
+            }
+    )
     @PostMapping
     public ResponseEntity<LivroResponse> criar(@RequestBody @Valid LivroRequest request){
         Livro livro = mapper.map(request, Livro.class);
@@ -30,7 +48,9 @@ public class LivroController {
         return ResponseEntity.created(URI.create(resp.getId().toString())).body(resp);
     }
 
+    @Operation(summary = "Serviço de consulta de todos os livros cadastrados", description = "Consulta geral de livros")
     @GetMapping
+//    @RolesAllowed({"ROLE_FUNCIONARIO", "ROLE_ADMIN", "ROLE_LEITOR"})
     public ResponseEntity<List<LivroResponse>> listar() {
         List<Livro> livros = service.consultar();
         List<LivroResponse> resp = new ArrayList<>();
